@@ -8,11 +8,12 @@
 <img width="694" height="453" alt="Screenshot 2025-12-23 at 7 48 59 PM" src="https://github.com/user-attachments/assets/41e4ea3f-03aa-4271-bc5b-e2fb7d797fc6" />
 
 
-A. async
-**
-Why async is used in feedback pipeline only optionally**
 
-- In feedback pipeline, all processing is row-by-row, synchronous in nature.
+A. async
+
+**Why async is used in feedback pipeline only optionally**
+
+- In feedback pipeline, all processing is row-by-row, synchronous in nature. async can be avoided because processing is batch, linear, and non-interactive. Each CSV row is handled end-to-end without streaming, pausing, or user input. async is only needed because the LLM call (ainvoke) is async, not due to workflow design.
 
 - Agents do not need to pause, stream partial results, or wait for user input.
 
@@ -54,10 +55,58 @@ astream allows streaming partial outputs.
 
 async for is needed to incrementally process multi-turn messages.
 
-4️⃣ Key takeaway
+Key takeaway
 
 Feedback pipeline = offline batch, row-independent → async optional, sequential is fine.
 
 Travel LangGraph = interactive multi-turn chat → async required for streaming, pause/resume, dynamic handoff.
 
 Both designs are correct, just optimized for different problem classes.
+
+
+
+B. Memory 
+
+**Why this LangGraph travel app looks very different from your feedback pipeline**
+
+1. Conversational vs batch processing
+
+- Travel chatbot is multi-turn, interactive, user-driven
+
+- Feedback pipeline is batch, one-shot, CSV-driven
+→ Hence MessagesState, interrupt, resume, and streaming are required here, but unnecessary earlier.
+
+2. Memory is core here, optional earlier
+
+Travel agents must remember:
+
+- last user preference
+
+- which agent was active (last_active_agent)
+
+conversation history
+→ Hence MessagesState + MemorySaver
+
+- Feedback system processes each row independently; memory is implicit in data, not dialogue.
+
+3. Agent handoff is dynamic
+
+- Travel ↔ Hotel agents decide at runtime when to hand off using tools (handoff_to_*)
+
+- Feedback agents follow a fixed graph (classify → extract → ticket)
+
+4. Human-in-the-loop is mandatory
+
+- Chatbots must pause (interrupt) and resume
+
+- Feedback pipeline runs end-to-end without waiting for humans
+
+5. Async/streaming is UX-driven
+- Streaming responses matter in chat
+
+- Not required for offline feedback analysis
+
+Key takeaway
+
+Your feedback design would NOT work well for this travel use case, and this travel design would be overkill for feedback.
+Both are correct LangGraph architectures, optimized for different problem classes.
