@@ -9,9 +9,9 @@
 
 
 
-##About async
+## About async
 
-###**Why async is used in feedback pipeline only optionally**
+### **Why async is used in feedback pipeline only optionally**
 
 - In feedback pipeline, all processing is row-by-row, synchronous in nature. async can be avoided because processing is batch, linear, and non-interactive. Each CSV row is handled end-to-end without streaming, pausing, or user input. async is only needed because the LLM call (ainvoke) is async, not due to workflow design.
 
@@ -35,7 +35,7 @@ async def run_pipeline(csv_path: str, source_type: str):
 
 Here async is only needed because graph.ainvoke itself is an async call. If the LLM agent were synchronous, we wouldn’t need async at all.
 
-###**Why travel chatbot uses async heavily**
+### **Why travel chatbot uses async heavily**
 
 Streaming responses: partial text sent to user in real-time → must await LLM streams.
 
@@ -65,9 +65,9 @@ Both designs are correct, just optimized for different problem classes.
 
 
 
-##About Memory etc.
+## About Memory etc.
 
-###**Why this LangGraph travel app looks very different from your feedback pipeline**
+### **Why this LangGraph travel app looks very different from your feedback pipeline**
 
 1. Conversational vs batch processing
 
