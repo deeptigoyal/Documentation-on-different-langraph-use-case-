@@ -9,7 +9,7 @@
 
 
 
-##A. async
+##About async
 
 ###**Why async is used in feedback pipeline only optionally**
 
@@ -65,7 +65,7 @@ Both designs are correct, just optimized for different problem classes.
 
 
 
-##B. Memory 
+##About Memory etc.
 
 ###**Why this LangGraph travel app looks very different from your feedback pipeline**
 
