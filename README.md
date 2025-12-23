@@ -37,13 +37,14 @@ Here async is only needed because graph.ainvoke itself is an async call. If the 
 
 ### **Why travel chatbot uses async heavily**
 
-Streaming responses: partial text sent to user in real-time → must await LLM streams.
+1. 
+- Streaming responses: partial text sent to user in real-time → must await LLM streams.
 
-Interrupt/resume: user may ask to cancel or change topic → async allows “pause/resume” at any point.
+- Interrupt/resume: user may ask to cancel or change topic → async allows “pause/resume” at any point.
 
-Dynamic multi-agent handoff: decision to call a different agent depends on runtime user input → async ensures smooth switching without blocking.
+- Dynamic multi-agent handoff: decision to call a different agent depends on runtime user input → async ensures smooth switching without blocking.
 
-Memory state: conversation history needs to be updated incrementally, often while waiting for LLM → async avoids blocking UI.
+- Memory state: conversation history needs to be updated incrementally, often while waiting for LLM → async avoids blocking UI.
 
 Example (travel bot):
 
@@ -53,7 +54,7 @@ async for event in travel_graph.astream(messages_state):
 
 astream allows streaming partial outputs.
 
-async for is needed to incrementally process multi-turn messages.
+- async for is needed to incrementally process multi-turn messages.
 
 <p style="font-size:50px;">Key takeaway</p>
 
