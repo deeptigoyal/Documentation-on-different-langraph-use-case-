@@ -55,7 +55,7 @@ astream allows streaming partial outputs.
 
 async for is needed to incrementally process multi-turn messages.
 
-<p style="font-size:20px;">Key takeaway</p>
+<p style="font-size:50px;">Key takeaway</p>
 
 Feedback pipeline = offline batch, row-independent → async optional, sequential is fine.
 
